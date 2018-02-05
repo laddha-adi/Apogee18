@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "975053221879",
+    "firebase_url": "https://vendorapp-80efa.firebaseio.com",
+    "project_id": "vendorapp-80efa",
+    "storage_bucket": "vendorapp-80efa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975053221879:android:aa855be4cd69c96c",
+        "android_client_info": {
+          "package_name": "example.aditya.com.vendorapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "975053221879-8sg918dag3h1v2fpemt5s1dh018cu8lr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC80LSMSpogNopxvrwlw8rmrIw0hEI3Cok"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

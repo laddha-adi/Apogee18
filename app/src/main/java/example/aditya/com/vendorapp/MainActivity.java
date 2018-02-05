@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
      private RecyclerView mRecyclerView;
     private FloatingActionButton fab;
     private RecyclerViewAdapter adapter;
-    private int color = 0;
     private List<String> data;
     private String insertData;
     int num = 1;
@@ -29,9 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar_recycler_view);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+
 
         initData();
         initView();
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(adapter);
         data.clear();
         adapter.setItems(data);
-        Toast.makeText(this, String.valueOf(data.size()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, String.valueOf(data.size()), Toast.LENGTH_LONG).show();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
