@@ -8,15 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements onMoveAndSwipedListener {
 
     private Context context;
-    private List<String> mItems;
+    private ArrayList<Order> mItems;
     private int color = 0;
     private View parentView;
     private final int TYPE_NORMAL = 1;
@@ -28,12 +28,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         mItems = new ArrayList();
     }
 
-    public void setItems(List<String> data) {
+    public void setItems(ArrayList<Order> data) {
           this.mItems = data;
         notifyDataSetChanged();
     }
 
-    public void addItem(int position, String insertData) {
+    public void addItem(int position, Order insertData) {
         mItems.add(position,insertData);
         notifyItemInserted(position);
     }
@@ -61,7 +61,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        holder.title.setText(mItems.get(position));
+        holder.title.setText(mItems.get(position).getID());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,15 +71,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         });
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        String s = mItems.get(position);
-        if (s.equals(FOOTER)) {
-            return TYPE_FOOTER;
-        } else {
-            return TYPE_NORMAL;
-        }
-    }
+
 
     @Override
     public int getItemCount() {
@@ -96,7 +88,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onItemDismiss(final int position) {
-        final String data = mItems.get(position);
+        final Order data = mItems.get(position);
        // Toast.makeText(context, "removed"+ data, Toast.LENGTH_SHORT).show();
         mItems.remove(position);
         notifyItemRemoved(position);
@@ -105,8 +97,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .setAction(context.getString(R.string.item_swipe_undo), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       // Toast.makeText(context, "adding: "+data, Toast.LENGTH_SHORT).show();
-                        addItem(position,data );
+                        Toast.makeText(context, "adding: "+data, Toast.LENGTH_SHORT).show();
+                        addItem(position,data);
                     }
                 }).show();
     }

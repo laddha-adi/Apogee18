@@ -7,19 +7,25 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.View;
-import android.widget.Toast;
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
      private RecyclerView mRecyclerView;
     private FloatingActionButton fab;
     private RecyclerViewAdapter adapter;
-    private List<String> data;
+    private ArrayList<Order> orderArrayList;
     private String insertData;
     int num = 1;
+    String VendorID="vendorIdXYZABC";
+    DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +35,52 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar_recycler_view);
         setSupportActionBar(toolbar);
 
+        mDatabase= FirebaseDatabase.getInstance().getReference();
 
         initData();
-        initView();
     }
 
     private void initData() {
-        data = new ArrayList<>();
-        data.clear();
+        orderArrayList = new ArrayList<>();
+        orderArrayList.clear();
         insertData = "0";
+        mDatabase.child("Orders").child(VendorID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                for(DataSnapshot orders : dataSnapshot.getChildren()) {
+                    String id = new String();
+                    ArrayList<Item> itemArrayList = new ArrayList<>();
+
+
+                            for (DataSnapshot orderItem : orders.getChildren()) {
+                                Log.e("yo man",String.valueOf(orderItem.getKey()));
+
+                                if(orderItem.getKey().equals("ID")){
+                                    id = (String) orderItem.getValue();
+                                    Log.e("ID",id+"");
+                                }
+                                else{
+                                String name = (String) orderItem.child("name").getValue();
+                                Log.e("name",name+"error");
+                                //int quantity = (int)(long)orderItem.child("quan").getValue();
+                                int quantity = 1;
+                                itemArrayList.add(new Item(name, quantity));
+                                Log.e("item",(new Item(name,quantity)).toString());
+                            }
+                            }
+
+                        orderArrayList.add(new Order(itemArrayList,id));
+                }
+                initView();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
      }
 
     private void initView() {
@@ -50,10 +93,10 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new RecyclerViewAdapter(this);
         mRecyclerView.setAdapter(adapter);
-        data.clear();
-        adapter.setItems(data);
-        Toast.makeText(this, String.valueOf(data.size()), Toast.LENGTH_LONG).show();
-        fab.setOnClickListener(new View.OnClickListener() {
+        //data.clear();
+        adapter.setItems(orderArrayList);
+       // Toast.makeText(this, String.valueOf(data.size()), Toast.LENGTH_LONG).show();
+        /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
@@ -62,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 mRecyclerView.smoothScrollToPosition(0);
             }
         });
-
+*/
         ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(adapter);
         ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
