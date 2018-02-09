@@ -18,13 +18,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-     private RecyclerView mRecyclerView;
+
+    private RecyclerView mRecyclerView;
     private FloatingActionButton fab;
     private RecyclerViewAdapter adapter;
-    private ArrayList<Order> orderArrayList;
+    public static ArrayList<Order> orderArrayList;
     private String insertData;
     int num = 1;
-    String VendorID="vendorIdXYZABC";
+    String VendorID="1";
     DatabaseReference mDatabase;
 
     @Override
@@ -37,43 +38,70 @@ public class MainActivity extends AppCompatActivity {
 
         mDatabase= FirebaseDatabase.getInstance().getReference();
 
-        initData();
+        fab = findViewById(R.id.fab_recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view_recycler_view);
+
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+
+        adapter = new RecyclerViewAdapter(this,orderArrayList);
+        mRecyclerView.setAdapter(adapter);
+        orderArrayList = new ArrayList<>();
+      //  adapter.setItems(orderArrayList);
+
+        ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(adapter);
+        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    initData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+
     }
 
     private void initData() {
         orderArrayList = new ArrayList<>();
         orderArrayList.clear();
         insertData = "0";
-        mDatabase.child("Orders").child(VendorID).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("stall").child(VendorID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                orderArrayList.clear();
 
-
+                        Log.e("Numbers of orders: " ,String.valueOf(dataSnapshot.getChildrenCount()));
                 for(DataSnapshot orders : dataSnapshot.getChildren()) {
-                    String id = new String();
+
+                    String orderID = String.valueOf(orders.child("id").getValue());
+                    String unique_code = String.valueOf(orders.child("unique_code").getValue());
+
                     ArrayList<Item> itemArrayList = new ArrayList<>();
 
+                    for(DataSnapshot order_item : orders.child("sales").getChildren()) {
 
-                            for (DataSnapshot orderItem : orders.getChildren()) {
-                                Log.e("yo man",String.valueOf(orderItem.getKey()));
+                        String name = (String) order_item.child("product").child("name").getValue();
+                        long quantity = (Long) order_item.child("quantity").getValue();
+                        itemArrayList.add(new Item(name, quantity));
+                    }
 
-                                if(orderItem.getKey().equals("ID")){
-                                    id = (String) orderItem.getValue();
-                                    Log.e("ID",id+"");
-                                }
-                                else{
-                                String name = (String) orderItem.child("name").getValue();
-                                Log.e("name",name+"error");
-                                //int quantity = (int)(long)orderItem.child("quan").getValue();
-                                int quantity = 1;
-                                itemArrayList.add(new Item(name, quantity));
-                                Log.e("item",(new Item(name,quantity)).toString());
-                            }
-                            }
-
-                        orderArrayList.add(new Order(itemArrayList,id));
+                    orderArrayList.add(new Order(itemArrayList,orderID,unique_code));
+                    Log.e("order List refreshed:",String.valueOf(orderArrayList.get(0).getItemArrayList().get(0)));
+                    adapter.notifyDataSetChanged();
                 }
-                initView();
+              //  adapter.notifyDataSetChanged();
+                adapter.setItems(orderArrayList);
+
             }
 
             @Override
@@ -83,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         });
      }
 
-    private void initView() {
+ /*   private void initView() {
         fab = findViewById(R.id.fab_recycler_view);
         mRecyclerView = findViewById(R.id.recycler_view_recycler_view);
 
@@ -91,9 +119,8 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.setLayoutManager(linearLayoutManager);
 
 
-        adapter = new RecyclerViewAdapter(this);
+      //  adapter = new RecyclerViewAdapter(this);
         mRecyclerView.setAdapter(adapter);
-        //data.clear();
         adapter.setItems(orderArrayList);
        // Toast.makeText(this, String.valueOf(data.size()), Toast.LENGTH_LONG).show();
         /*fab.setOnClickListener(new View.OnClickListener() {
@@ -106,12 +133,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 */
-        ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(adapter);
-        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
 
-    }
+
+
 
 
 

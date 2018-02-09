@@ -17,15 +17,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private Context context;
     private ArrayList<Order> mItems;
-    private int color = 0;
-    private View parentView;
-    private final int TYPE_NORMAL = 1;
-    private final int TYPE_FOOTER = 2;
-    private final String FOOTER = "footer";
+     private View parentView;
 
-    public RecyclerViewAdapter(Context context) {
+
+    public RecyclerViewAdapter(Context context,ArrayList<Order> mItems) {
         this.context = context;
-        mItems = new ArrayList();
+        this.mItems = new ArrayList();
+        this.mItems = mItems;
     }
 
     public void setItems(ArrayList<Order> data) {
@@ -60,12 +58,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
-        holder.title.setText(mItems.get(position).getID());
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        holder.title.setText(mItems.get(position).getUniqueId());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailsActivity.class);
+
+                intent.putExtra("order_num",position);
+
                 context.startActivity(intent);
             }
         });
@@ -75,7 +76,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+       if(mItems!=null) return mItems.size();
+       else return 0;
     }
 
 
@@ -89,7 +91,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onItemDismiss(final int position) {
         final Order data = mItems.get(position);
-       // Toast.makeText(context, "removed"+ data, Toast.LENGTH_SHORT).show();
+
         mItems.remove(position);
         notifyItemRemoved(position);
 
@@ -102,9 +104,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
                 }).show();
     }
-
-
-
-
 
 }

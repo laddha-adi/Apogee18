@@ -2,11 +2,11 @@ package example.aditya.com.vendorapp;
 
 /**
  * Created by aditya on 2/6/2018.
- */
+ **/
 
 public class Item {
     String name;
-    int quantity;
+    long quantity;
 
     public String getName() {
         return name;
@@ -16,7 +16,7 @@ public class Item {
         this.name = name;
     }
 
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
@@ -24,7 +24,7 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public Item(String name, int quantity) {
+    public Item(String name, long quantity) {
         this.name = name;
         this.quantity = quantity;
     }
