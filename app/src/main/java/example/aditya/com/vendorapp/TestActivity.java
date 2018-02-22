@@ -8,7 +8,8 @@ import android.widget.Button;
 import static example.aditya.com.vendorapp.Communicator.Login;
 import static example.aditya.com.vendorapp.Communicator.cancelOrder;
 import static example.aditya.com.vendorapp.Communicator.completeOrder;
-import static example.aditya.com.vendorapp.Communicator.updateToken;
+import static example.aditya.com.vendorapp.Communicator.getStallID;
+import static example.aditya.com.vendorapp.Communicator.getStallProducts;
 
 
 public class TestActivity extends AppCompatActivity {
@@ -17,6 +18,10 @@ public class TestActivity extends AppCompatActivity {
     Button button2;
     Button button3;
     Button button4;
+    Button button5;
+    Button button6;
+    Button button7;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,19 +32,21 @@ public class TestActivity extends AppCompatActivity {
         button2 = (Button) findViewById(R.id.btn_2);
         button3 = (Button) findViewById(R.id.btn_3);
         button4 = (Button) findViewById(R.id.btn_4);
+        button5 = (Button) findViewById(R.id.btn_5);
+        button6 = (Button) findViewById(R.id.btn_6);
 
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateToken();
+                getStallID();
             }
         });
 
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               String order_id = "8";
+               String order_id = "32";
            completeOrder(order_id);
             }
         });
@@ -47,8 +54,8 @@ public class TestActivity extends AppCompatActivity {
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String order_id = "8";
-                cancelOrder(order_id);
+                String order_id = "32";
+                cancelOrder("1",order_id);
             }
         });
 
@@ -60,5 +67,21 @@ public class TestActivity extends AppCompatActivity {
                 Login(userId,Password);
             }
         });
+
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getStallID();
+            }
+        });
+
+        button6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getStallProducts();
+            }
+        });
+
+
     }
 }

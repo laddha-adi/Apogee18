@@ -4,10 +4,18 @@ package example.aditya.com.vendorapp;
  * Created by aditya on 2/6/2018.
  **/
 
-public class Item {
+public class StatsItem {
     String name;
     long quantity;
     long price;
+    long id;
+
+    public StatsItem(String name, long quantity, long price, long id) {
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -19,16 +27,6 @@ public class Item {
 
     public long getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public Item(String name, long quantity,long price) {
-        this.name = name;
-        this.quantity = quantity;
-        this.price = price;
     }
 
     public void setQuantity(long quantity) {
@@ -43,12 +41,21 @@ public class Item {
         this.price = price;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
-        return "Item{" +
+        return "StatsItem{" +
                 "name='" + name + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
+                ", id=" + id +
                 '}';
     }
 }

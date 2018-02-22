@@ -29,12 +29,14 @@ public class DetailsListAdapter extends RecyclerView.Adapter<DetailsListAdapter.
         View mView;
         TextView name;
         TextView quan;
+        TextView price;
 
         private MyViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
             this.name = itemView.findViewById(R.id.tv_name);
             this.quan = itemView.findViewById(R.id.tv_quantity);
+            this.price = itemView.findViewById(R.id.tv_price);
 
         }
     }
@@ -46,12 +48,16 @@ public class DetailsListAdapter extends RecyclerView.Adapter<DetailsListAdapter.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_detail_view, parent, false);
         return new DetailsListAdapter.MyViewHolder(view);
 
+
+
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.name.setText(mItems.get(position).getName());
         holder.quan.setText(String.valueOf(mItems.get(position).getQuantity()));
+        holder.price.setText(String.valueOf(mItems.get(position).getPrice()));
+
     }
 
     @Override

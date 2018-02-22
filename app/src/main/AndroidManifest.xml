@@ -12,14 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
             android:name=".LoginActivity"
             android:label="Vendor App">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".DetailsActivity"
@@ -27,12 +26,43 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".TestActivity">
+
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            -->
         </activity>
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            -->
+
+        </activity>
+        <activity android:name=".BlockActivity">
+        </activity>
+        <activity
+            android:name=".CompleteOrderDetail"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".StatsActivity">
+        </activity>
+
+        <service
+            android:name=".NotificationService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>

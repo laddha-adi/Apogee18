@@ -18,7 +18,7 @@
         android:id="@+id/btn_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="RefreshToken"/>
+        android:text="STALL ID"/>
 
     <Button
         android:id="@+id/btn_2"
@@ -31,5 +31,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ORDER CANCEL"/>
+
+    <Button
+        android:id="@+id/btn_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MOVE TO MAIN APP"/>
+
+    <Button
+        android:id="@+id/btn_6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GET PRODUCTS"/>
 
 </LinearLayout>
