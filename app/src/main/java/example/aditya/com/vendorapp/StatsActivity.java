@@ -39,24 +39,40 @@ public class StatsActivity extends AppCompatActivity {
         statsList.setAdapter(adapter);
         statsList.setLayoutManager(new LinearLayoutManager(this));
         total = findViewById(R.id.total);
-        mDatabase  = FirebaseDatabase.getInstance().getReference().child("stall").child(VendorID);
+        mDatabase  = FirebaseDatabase.getInstance().getReference().child("stall");
+                //.child(VendorID);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                orderArrayList.clear();
+                newArrayList.clear();
+                idList.clear();
                 try {
-                    for (DataSnapshot orders : dataSnapshot.getChildren()) {
+                    for(DataSnapshot vendors : dataSnapshot.getChildren()) {
 
-                        for (DataSnapshot item : orders.child("sales").getChildren()) {
+                        for (DataSnapshot orders : vendors.getChildren()) {
+                            boolean isReady = (boolean) orders.child("order_ready").getValue();
+                            boolean isComplete = (boolean) orders.child("order_complete").getValue();
+                            boolean isCancelled = (boolean) orders.child("cancelled").getValue();
 
-                            String name = (String) item.child("product").child("name").getValue();
-                            long id = (Long) item.child("product").child("id").getValue();
-                            long quantity = (Long) item.child("quantity").getValue();
-                            long price = (Long) item.child("product").child("price").getValue();
-                            orderArrayList.add(new StatsItem(name, quantity, price, id));
-                            adapter.notifyDataSetChanged();
+
+                            if ((boolean) orders.child("order_complete").getValue() == true)
+
+                            {
+                                for (DataSnapshot item : orders.child("sales").getChildren()) {
+
+                                    String name = (String) item.child("product").child("name").getValue();
+                                    long id = (Long) item.child("product").child("id").getValue();
+                                    long quantity = (Long) item.child("quantity").getValue();
+                                    long price = (Long) item.child("product").child("price").getValue();
+                                    orderArrayList.add(new StatsItem(name, quantity, price, id));
+                                    adapter.notifyDataSetChanged();
+
+                                }
+                            }
 
                         }
-                    }
+                   }
 
                     for(int i=0;i<orderArrayList.size();i++){
                        if(idList.contains(orderArrayList.get(i).getId())){

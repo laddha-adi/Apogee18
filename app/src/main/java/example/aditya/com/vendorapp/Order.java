@@ -16,8 +16,9 @@ public class Order {
     boolean isDeleted;
     String orderId;
     long total;
+    String time;
 
-    public Order(ArrayList<Item> itemArrayList, String ID,String token,Boolean isReady,Boolean isComplete, String orderId,boolean isDeleted) {
+    public Order(ArrayList<Item> itemArrayList, String ID,String token,Boolean isReady,Boolean isComplete, String orderId,boolean isDeleted, String time) {
         this.itemArrayList = itemArrayList;
         this.ID = ID;
         this.unique_id = token;
@@ -26,6 +27,7 @@ public class Order {
         this.orderId = orderId;
         this.isDeleted = isDeleted;
         total =0;
+        this.time = time;
         for(int i=0;i<itemArrayList.size();i++){
             total = total+ (itemArrayList.get(i).getPrice()*itemArrayList.get(i).getQuantity());
         }
@@ -118,5 +120,13 @@ public class Order {
 
     public void setTotal(long total) {
         this.total = total;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

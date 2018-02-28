@@ -106,6 +106,33 @@
                     android:text="1234"/>
 
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+
+
+                <TextView
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/imageView2"
+                    android:text="Order Time: "
+                    android:textSize="18sp"
+
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/tv_recycler_item_2"
+                    android:textSize="18sp"
+                    android:text=""/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -47,6 +47,10 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         getSupportActionBar().setTitle(stallName);
 
+        SharedPreferences sh = getApplicationContext().getSharedPreferences("default", MODE_PRIVATE);
+        sh.edit().putString("id", URLs.stallID).apply();
+        Intent intent = new Intent(this, NotificationService.class);
+        startService(intent);
        }
 
     @Override
@@ -85,6 +89,7 @@ public class HomeActivity extends AppCompatActivity {
             sharedPref.edit().remove("password").commit();
 
             Intent intent = new Intent(this, LoginActivity.class);
+           // intent.putExtra("flag",false);
             startActivity(intent);
             finish();
             return true;

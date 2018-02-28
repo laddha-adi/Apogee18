@@ -49,6 +49,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         RecyclerView list;
         CardView card;
         TextView total;
+        TextView time;
 
         private MyViewHolder(View itemView) {
             super(itemView);
@@ -61,7 +62,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             this.list = itemView.findViewById(R.id.list);
             this.card = itemView.findViewById(R.id.card_view_item_recycler_view);
             this.total = itemView.findViewById(R.id.order_total);
+            this.time = itemView.findViewById(R.id.tv_time);
         }
+
     }
 
     @Override
@@ -127,6 +130,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         );
         holder.list.addItemDecoration(mDividerItemDecoration);
         holder.total.setText(String.valueOf(mItems.get(position).getTotal()));
+        holder.time.setText(mItems.get(position).getTime());
 
     }
 

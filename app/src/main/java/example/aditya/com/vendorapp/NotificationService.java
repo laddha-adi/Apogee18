@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
@@ -16,56 +18,68 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import static example.aditya.com.vendorapp.URLs.stallID;
-
 public class NotificationService extends Service {
     public NotificationService() {
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         setListeners();
+
     }
+
 
     void setListeners(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("stall").child(stallID);
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+       try {
+           String vendorId = getApplicationContext().getSharedPreferences("default", MODE_PRIVATE).getString("id", "");
 
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+           DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("stall").child(vendorId);
+           reference.addValueEventListener(new ValueEventListener() {
+               @Override
+               public void onDataChange(DataSnapshot dataSnapshot) {
+                   for (DataSnapshot s : dataSnapshot.getChildren()) {
+
+                       setChildListeners(s.getRef());
+                   }
+               }
+
+               @Override
+               public void onCancelled(DatabaseError databaseError) {
+
+               }
+           });
+
+       }
+       catch(Exception e){
+               e.printStackTrace();
+           }
 
     }
 
-    void setChildListeners(final DatabaseReference ref, final String id){
+    void setChildListeners(final DatabaseReference ref){
 
-
-        ref.child(id).child("stallgroup").addValueEventListener(new ValueEventListener() {
+       ref.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 try {
-                    boolean cancelled = Boolean.valueOf(dataSnapshot.child("cancelled").getValue().toString());
-                    boolean order_ready = Boolean.valueOf(dataSnapshot.child("order_ready").getValue().toString());
-                    if (cancelled ){
-                        createNotification("Your recent order got cancelled");
-                    }else if (order_ready){
-                        createNotification("Your recent order is now ready");
-                    }
+                    boolean isComplete = (boolean)(dataSnapshot.child("order_complete").getValue());
+                    boolean cancelled =(boolean)(dataSnapshot.child("cancelled").getValue());
+                    boolean order_ready = (boolean)(dataSnapshot.child("order_ready").getValue());
+
+                    if ( ((!isComplete) && (!cancelled) && (!order_ready) )){
+                        String id = (String)dataSnapshot.child("orderid").getValue();
+                            createNotification("New Order available");
+                        }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -82,13 +96,16 @@ public class NotificationService extends Service {
         Intent intent = new Intent(this, LoginActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
         Log.e("Notification","Called");
+        Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
         Notification n  = new Notification.Builder(this)
-                .setContentTitle("BITS Emergency")
-                .setContentText(message)
-//                .setContentIntent(pIntent)
+                .setContentTitle("New Order available")
                 .setAutoCancel(true)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setAutoCancel(true)
+                .setContentIntent(pIntent)
+                .setSound(notificationSound)
                 .build();
-   //             .addAction(R.drawable.pay_icon, "View", pIntent).build();
 
 
         NotificationManager notificationManager =
@@ -101,6 +118,8 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //TODO do something useful
+
+       // Log.e("ID",id);
         return Service.START_STICKY;
     }
 }

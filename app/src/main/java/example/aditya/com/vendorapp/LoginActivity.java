@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         String username = sharedPref.getString("username","");
         String password = sharedPref.getString("password","");
+       // boolean f = getIntent().getBooleanExtra("flag",true);
         pd = new ProgressDialog(LoginActivity.this);
         pd.setMessage("Logging In...");
         pd.dismiss();
@@ -70,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.e("SharedPref","data present");
             mEmailView.setText(username);
             mPasswordView.setText(password);
-           // startPosting(username,password);
+         //  if(f) startPosting(username,password);
         }
         else{
             Log.e("SharedPref","data not present");

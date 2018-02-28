@@ -47,6 +47,7 @@ public class CompletedFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_completed, container, false);
 
         mDatabase= FirebaseDatabase.getInstance().getReference();
+        mDatabase.keepSynced(true);
 
         mRecyclerView = rootView.findViewById(R.id.recycler_view_recycler_view);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -98,6 +99,7 @@ public class CompletedFragment extends Fragment {
                         boolean isReady = (boolean)orders.child("order_ready").getValue();
                         boolean isComplete = (boolean)orders.child("order_complete").getValue();
                         boolean isCancelled = (boolean)orders.child("cancelled").getValue();
+                        String  time = (String)orders.child("created_at").getValue();
 
                         //    boolean  = (boolean)orders.child("order_complete").getValue();
 
@@ -118,7 +120,7 @@ public class CompletedFragment extends Fragment {
 
                                 itemArrayList.add(new Item(name,quantity,price));
                             }
-                            orderArrayList.add(new Order(itemArrayList,orderID,unique_code,isReady,isComplete,ordId,isCancelled));
+                            orderArrayList.add(new Order(itemArrayList,orderID,unique_code,isReady,isComplete,ordId,isCancelled,time));
                             Log.e("order List refreshed:",String.valueOf(orderArrayList.get(0).getItemArrayList().get(0)));
                             adapter.notifyDataSetChanged();
                         }
