@@ -95,7 +95,7 @@ public class MainFragment extends Fragment {
                         boolean isCancelled = (boolean)orders.child("cancelled").getValue();
                         String  time = (String)orders.child("created_at").getValue();
 
-                        if((boolean)orders.child("cancelled").getValue()== false && (boolean)orders.child("order_complete").getValue()==false)
+                        if((boolean)orders.child("cancelled").getValue()== false && (boolean)orders.child("order_complete").getValue()==false && (boolean)orders.child("order_ready").getValue()==true)
                         {            String orderID = String.valueOf(orders.child("id").getValue());
                             String unique_code = String.valueOf(orders.child("unique_code").getValue());
                             String ordId = String.valueOf(orders.child("orderid").getValue());
